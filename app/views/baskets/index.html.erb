@@ -1,0 +1,7 @@
+<h1>Baskets</h1>
+<% @baskets.each do |basket| %>
+    <a href="/baskets/<%= basket.id %>"><%= basket.title %></a>
+    <br>
+<% end %>
+<br>
+<%= link_to 'New basket', new_basket_path, method: :get%>

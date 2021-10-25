@@ -1,0 +1,63 @@
+<h1><%= @basket.title %></h1>
+
+<h2>Input</h2>
+<% @basket.items.each do |item| %>
+    <%if item.imported%>
+        <%=item.quantity%> imported <%=item.name%> at <%=item.price%>
+    <%else%>
+        <%=item.quantity%> <%=item.name%> at <%=item.price%>
+    <%end%>
+    <%= link_to 'Delete item', item_path(item), method: :delete%>
+    <br>
+<% end %>
+
+<h2>Output</h2>
+<% total_price = 0 %>
+<% total_tax = 0 %>
+<% @basket.items.each do |item| %>
+    <% item_tax = 0 %>
+    <% item_tax = item_tax.round(2) %>
+    <% if item.category == "Other" %>
+        <% item_tax += item.quantity*(item.price*0.10*20).ceil()/20.0 %>
+    <% end %>
+    <%if item.imported%>
+        <% item_tax += (item.quantity*(item.price*0.05*20).ceil()/20.0).round(2) %>
+        <% item_tax = item_tax.round(2) %>
+        <%=item.quantity%> imported <%=item.name%> : <%=number_with_precision((item.price*item.quantity + item_tax).round(2), precision: 2)%>
+    <%else%>
+        <%=item.quantity%> <%=item.name%> : <%=number_with_precision((item.price*item.quantity + item_tax).round(2), precision: 2)%>
+    <%end%>
+    <br>
+    <%total_price += item.price*item.quantity + item_tax%>
+    <% total_tax += item_tax %>
+<% end %>
+Sales Taxes: <%=number_with_precision((total_tax).round(2), precision: 2)%>
+<br>
+Total: <%=number_with_precision((total_price).round(2), precision: 2)%>
+
+
+<h3>Add item</h3>
+<%= flash.alert %>
+<%= form_for :item, method: 'post', url: items_path do |f| %>
+
+    Name: <%= f.text_field :name %>
+    <br>
+    Price: <%= f.number_field :price, step: :any %>
+    <br>
+    Quantity: <%= f.number_field :quantity, step: 1 %>
+    <br>
+    Category: <select name="item[category]">
+        <option value="Books">Books</option>
+        <option value="Food" >Food</option>
+        <option value="Medical">Medical</option>
+        <option value="Other" selected="selected">Other</option>
+    </select>
+    <br>
+    Imported?: <%= f.check_box :imported %>
+    <br>
+    
+    <input type="hidden" name="item[basket_id]" value="<%=@basket.id%>">
+    <p>
+        <%= f.submit %>
+    </p>
+<% end %>
