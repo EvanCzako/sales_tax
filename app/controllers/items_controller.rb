@@ -19,8 +19,6 @@ class ItemsController < ApplicationController
         else
             @item.imported = true
         end
-        puts item_params
-        puts @item.imported
         if @item.save
             redirect_to "/baskets/#{@item.basket_id}"
         else
