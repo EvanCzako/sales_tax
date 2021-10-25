@@ -61,3 +61,5 @@ Total: <%=number_with_precision((total_price).round(2), precision: 2)%>
         <%= f.submit %>
     </p>
 <% end %>
+<br>
+<%= link_to 'All baskets', baskets_path, method: :get%>
