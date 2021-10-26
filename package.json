@@ -2,6 +2,10 @@
   "name": "sales-tax",
   "private": true,
   "dependencies": {
+  },
+  "version": "0.1.0",
+  "devDependencies": {
+    "webpack-dev-server": "^3",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
@@ -10,15 +14,11 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
-  "version": "0.1.0",
-  "devDependencies": {
-    "webpack-dev-server": "^3"
-  },
   "engines": {
     "node": "12.5.0",
     "npm": "6.9.0"
   },
   "scripts": {
-    "postinstall": "webpack"
+    "heroku-postbuild": "webpack --config webpack.prod.js"
   }
 }
